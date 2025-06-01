@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 
-public class Main exends Application {
+public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
