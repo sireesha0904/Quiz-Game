@@ -55,7 +55,7 @@ public class RegisterController {
     @FXML
     private void goToLogin(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Login");

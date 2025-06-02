@@ -24,7 +24,7 @@ public class LoginController {
     @FXML
     private Label messageLabel;
 
-    private AuthService authService = new AuthService();
+    private final AuthService authService = new AuthService();
 
     @FXML
     private void handleLogin(ActionEvent event) {
@@ -42,8 +42,7 @@ public class LoginController {
             messageLabel.setStyle("-fx-text-fill: green;");
             messageLabel.setText("Login successful! Welcome " + user.getFullName());
 
-            // TODO: Load the dashboard or quiz list scene here
-
+            // TODO: Replace this with actual dashboard or next screen
         } else {
             messageLabel.setStyle("-fx-text-fill: red;");
             messageLabel.setText("Invalid username or password.");
@@ -53,7 +52,7 @@ public class LoginController {
     @FXML
     private void goToRegister(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/register.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Register");

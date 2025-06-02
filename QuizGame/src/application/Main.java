@@ -10,8 +10,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/login.fxml"));
-        primaryStage.setTitle("Online Quiz Application - Login");
+        System.out.println(getClass().getResource("/fxml/login.fxml")); // Debug
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
+        primaryStage.setTitle("Login Page");
         primaryStage.setScene(new Scene(root, 400, 300));
         primaryStage.show();
     }
