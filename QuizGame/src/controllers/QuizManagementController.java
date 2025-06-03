@@ -3,7 +3,12 @@ package controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import models.Question;
 import models.Quiz;
 import services.QuestionService;
@@ -160,7 +165,7 @@ public class QuizManagementController {
 
         Question question = new Question();
         question.setQuizId(selectedQuiz.getId());
-        question.setText(questionText);
+        question.setQuestionText(questionText);
         question.setOptionA(optA);
         question.setOptionB(optB);
         question.setOptionC(optC);

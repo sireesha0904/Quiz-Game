@@ -1,90 +1,56 @@
 package services;
 
-import db.DBConnection;
 import models.Quiz;
+import models.Question;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuizService {
 
+    private List<Quiz> quizList = new ArrayList<>();
+    private int nextQuizId = 1;
+
+    private QuestionService questionService = new QuestionService();
+
+    // Create a new quiz
     public boolean createQuiz(Quiz quiz) {
-        String sql = "INSERT INTO quizzes (title, description) VALUES (?, ?)";
+        if (quiz == null) return false;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setString(1, quiz.getTitle());
-            stmt.setString(2, quiz.getDescription());
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) return false;
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    quiz.setId(generatedKeys.getInt(1));
-                }
-            }
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        quiz.setId(nextQuizId++);
+        quizList.add(quiz);
+        return true;
     }
 
+    // Get all quizzes
     public List<Quiz> getAllQuizzes() {
-        List<Quiz> quizzes = new ArrayList<>();
-        String sql = "SELECT * FROM quizzes";
+        // For each quiz, load its questions from questionService
+        for (Quiz quiz : quizList) {
+            List<Question> questions = questionService.getQuestionsByQuizId(quiz.getId());
+            quiz.setQuestions(questions);
+        }
+        return new ArrayList<>(quizList);
+    }
 
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Quiz quiz = new Quiz();
-                quiz.setId(rs.getInt("id"));
-                quiz.setTitle(rs.getString("title"));
-                quiz.setDescription(rs.getString("description"));
-                quizzes.add(quiz);
+    // Update a quiz
+    public boolean updateQuiz(Quiz updatedQuiz) {
+        for (int i = 0; i < quizList.size(); i++) {
+            if (quizList.get(i).getId() == updatedQuiz.getId()) {
+                quizList.set(i, updatedQuiz);
+                return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return quizzes;
+        return false;
     }
 
-    public boolean updateQuiz(Quiz quiz) {
-        String sql = "UPDATE quizzes SET title = ?, description = ? WHERE id = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, quiz.getTitle());
-            stmt.setString(2, quiz.getDescription());
-            stmt.setInt(3, quiz.getId());
-
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
+    // Delete a quiz by ID (also delete its questions)
     public boolean deleteQuiz(int quizId) {
-        String sql = "DELETE FROM quizzes WHERE id = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, quizId);
-            return stmt.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        // Delete all questions of this quiz
+        List<Question> questions = questionService.getQuestionsByQuizId(quizId);
+        for (Question q : questions) {
+            questionService.deleteQuestion(q.getId());
         }
+        // Delete the quiz
+        return quizList.removeIf(q -> q.getId() == quizId);
     }
 }

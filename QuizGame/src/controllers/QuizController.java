@@ -1,10 +1,12 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Question;
 import models.Quiz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuizController {
@@ -28,24 +30,33 @@ public class QuizController {
     @FXML
     private Label feedbackLabel;
 
+    @FXML
+    private Button submitAnswerBtn;
+
+    // Call this method to set the quiz and start showing questions
     public void setQuiz(Quiz quiz) {
         this.currentQuiz = quiz;
-        this.questions = quiz.getQuestions();  // assuming Quiz has getQuestions() returning List<Question>
+        this.questions = quiz.getQuestions() != null ? quiz.getQuestions() : new ArrayList<>();
         this.currentQuestionIndex = 0;
+
         quizTitleLabel.setText(quiz.getTitle());
         feedbackLabel.setText("");
+        submitAnswerBtn.setDisable(false);
+
         showQuestion(currentQuestionIndex);
     }
 
     private void showQuestion(int index) {
-        if (questions == null || questions.isEmpty() || index >= questions.size()) {
-            questionLabel.setText("No questions available.");
+        if (questions.isEmpty() || index >= questions.size()) {
+            questionLabel.setText("No questions available or quiz completed.");
             disableOptions(true);
+            submitAnswerBtn.setDisable(true);
             return;
         }
 
         Question q = questions.get(index);
         questionLabel.setText((index + 1) + ". " + q.getQuestionText());
+
         optionARadio.setText(q.getOptionA());
         optionBRadio.setText(q.getOptionB());
         optionCRadio.setText(q.getOptionC());
@@ -54,6 +65,7 @@ public class QuizController {
         optionsGroup.selectToggle(null);
         feedbackLabel.setText("");
         disableOptions(false);
+        submitAnswerBtn.setDisable(false);
     }
 
     private void disableOptions(boolean disable) {
@@ -86,15 +98,16 @@ public class QuizController {
         }
 
         disableOptions(true);
+        submitAnswerBtn.setDisable(true);
 
-        // Move to next question after a short delay (e.g., 1.5 seconds)
+        // After 1.5 seconds, show next question or finish quiz
         new Thread(() -> {
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            javafx.application.Platform.runLater(() -> {
+            Platform.runLater(() -> {
                 currentQuestionIndex++;
                 if (currentQuestionIndex < questions.size()) {
                     showQuestion(currentQuestionIndex);

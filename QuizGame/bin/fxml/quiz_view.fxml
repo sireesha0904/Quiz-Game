@@ -1,1 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/18.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.QuizController" spacing="15" padding="20">
+
+    <Label fx:id="quizTitleLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <Label fx:id="questionLabel" wrapText="true" style="-fx-font-size: 18px;"/>
+
+    <ToggleGroup fx:id="optionsGroup" />
+
+    <VBox spacing="10">
+        <RadioButton fx:id="optionARadio" toggleGroup="$optionsGroup" />
+        <RadioButton fx:id="optionBRadio" toggleGroup="$optionsGroup" />
+        <RadioButton fx:id="optionCRadio" toggleGroup="$optionsGroup" />
+        <RadioButton fx:id="optionDRadio" toggleGroup="$optionsGroup" />
+    </VBox>
+
+    <Button text="Submit Answer" onAction="#handleSubmitAnswer"/>
+
+    <Label fx:id="feedbackLabel" style="-fx-text-fill: green; -fx-font-size: 16px;"/>
+
+</VBox>

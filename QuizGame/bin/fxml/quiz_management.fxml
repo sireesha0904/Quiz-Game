@@ -1,1 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" padding="15" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.QuizManagementController">
+
+    <HBox spacing="10">
+        <VBox>
+            <Label text="Quizzes:" />
+            <ListView fx:id="quizListView" prefWidth="200" prefHeight="300"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Add Quiz" onAction="#addQuiz"/>
+                <Button text="Update Quiz" onAction="#updateQuiz"/>
+                <Button text="Delete Quiz" onAction="#deleteQuiz"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="10" padding="10">
+            <Label text="Quiz Title:" />
+            <TextField fx:id="quizTitleField" prefWidth="300"/>
+
+            <Label text="Description:" />
+            <TextArea fx:id="quizDescriptionArea" prefWidth="300" prefHeight="60"/>
+
+            <Separator />
+
+            <Label text="Add Question:" />
+
+            <Label text="Question Text:" />
+            <TextArea fx:id="questionTextArea" prefWidth="300" prefHeight="60"/>
+
+            <HBox spacing="10">
+                <VBox>
+                    <Label text="Option A:" />
+                    <TextField fx:id="optionAField" prefWidth="140"/>
+                </VBox>
+                <VBox>
+                    <Label text="Option B:" />
+                    <TextField fx:id="optionBField" prefWidth="140"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="10">
+                <VBox>
+                    <Label text="Option C:" />
+                    <TextField fx:id="optionCField" prefWidth="140"/>
+                </VBox>
+                <VBox>
+                    <Label text="Option D:" />
+                    <TextField fx:id="optionDField" prefWidth="140"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Correct Option:" />
+            <ChoiceBox fx:id="correctOptionChoiceBox" prefWidth="120"/>
+
+            <Button text="Add Question" onAction="#addQuestion" maxWidth="150"/>
+        </VBox>
+    </HBox>
+</VBox>
