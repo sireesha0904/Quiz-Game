@@ -4,54 +4,36 @@ import models.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class QuestionService {
 
-    private List<Question> questions = new ArrayList<>();
+    private List<Question> questionList = new ArrayList<>();
+    private int nextQuestionId = 1;
 
-    // Add a question and return true if successful
+    // Add a new question
     public boolean addQuestion(Question question) {
-        try {
-            questions.add(question);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        if (question == null) return false;
+
+        question.setId(nextQuestionId++);
+        questionList.add(question);
+        return true;
     }
 
-    // Get all questions
+    // Get questions by quiz ID
+    public List<Question> getQuestionsByQuizId(int quizId) {
+        return questionList.stream()
+                .filter(q -> q.getQuizId() == quizId)
+                .collect(Collectors.toList());
+    }
+
+    // Delete question by ID
+    public boolean deleteQuestion(int questionId) {
+        return questionList.removeIf(q -> q.getId() == questionId);
+    }
+
+    // Optional: Get all questions (useful for debugging/testing)
     public List<Question> getAllQuestions() {
-        return new ArrayList<>(questions);
+        return new ArrayList<>(questionList);
     }
-
-    // Find question by ID (assuming Question has an ID field)
-    public Optional<Question> getQuestionById(int id) {
-        return questions.stream()
-                .filter(q -> q.getId() == id)
-                .findFirst();
-    }
-
-    // Update an existing question
-    public boolean updateQuestion(Question updatedQuestion) {
-        try {
-            for (int i = 0; i < questions.size(); i++) {
-                if (questions.get(i).getId() == updatedQuestion.getId()) {
-                    questions.set(i, updatedQuestion);
-                    return true;
-                }
-            }
-            return false;  // Question not found
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Delete a question by ID
-    public boolean deleteQuestion(int id) {
-        return questions.removeIf(q -> q.getId() == id);
-    }
-
 }
