@@ -57,7 +57,6 @@ public class Question {
     public void setCorrectOption(String correctOption) {
         this.correctOption = correctOption;
     }
-}
 
 
     // Returns the text for the correct option letter
