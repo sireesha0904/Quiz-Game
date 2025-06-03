@@ -8,13 +8,11 @@ import java.util.Optional;
 
 public class QuestionService {
 
-    // In-memory storage of questions (replace with DB logic if needed)
     private List<Question> questions = new ArrayList<>();
 
-    // Add a new question
+    // Add a question and return true if successful
     public boolean addQuestion(Question question) {
         try {
-            // Optionally validate the question here before adding
             questions.add(question);
             return true;
         } catch (Exception e) {
