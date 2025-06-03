@@ -1,1 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.DashboardController">
+    <top>
+        <Label text="Available Quizzes"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15px;"/>
+    </top>
+
+    <center>
+        <VBox spacing="10.0" padding="20">
+            <ListView fx:id="quizListView" prefHeight="300"/>
+            <Button text="Start Quiz" onAction="#handleStartQuiz" />
+            <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
+        </VBox>
+    </center>
+</BorderPane>

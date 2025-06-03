@@ -10,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import models.User; // Make sure you have this model
 import java.io.IOException;
 
 public class LoginController {
@@ -32,17 +32,35 @@ public class LoginController {
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
+            messageLabel.setStyle("-fx-text-fill: red;");
             messageLabel.setText("Please enter username and password.");
             return;
         }
 
-        var user = authService.loginUser(username, password);
+        User user = authService.loginUser(username, password);
 
         if (user != null) {
             messageLabel.setStyle("-fx-text-fill: green;");
             messageLabel.setText("Login successful! Welcome " + user.getFullName());
 
-            // TODO: Replace this with actual dashboard or next screen
+            try {
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+                Parent root;
+
+                if ("admin".equalsIgnoreCase(user.getRole())) {
+                    root = FXMLLoader.load(getClass().getResource("/fxml/quiz_management.fxml"));
+                    stage.setTitle("Quiz Management - Admin");
+                } else {
+                    root = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
+                    stage.setTitle("Dashboard - User");
+                }
+
+                stage.setScene(new Scene(root));
+            } catch (IOException e) {
+                e.printStackTrace();
+                messageLabel.setText("Failed to load next screen.");
+            }
+
         } else {
             messageLabel.setStyle("-fx-text-fill: red;");
             messageLabel.setText("Invalid username or password.");
